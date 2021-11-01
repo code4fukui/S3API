@@ -2,13 +2,10 @@ import { S3Bucket } from "https://deno.land/x/s3@0.4.1/mod.ts";
 import { YAML } from "https://js.sabae.cc/YAML.js";
 
 class S3 {
-  async init(ispublic) {
-    this.ispublic = ispublic;
+  async init(putopt = { acl: "public-read" }) { // default public!!
+    this.putopt = putopt;
     
     const setting = YAML.parse(await Deno.readTextFile("s3.secret.yml"));
-    if (!setting.AWS_ACCESS_KEY_ID) {
-      throw new Error("please set AWS_ACCESS_KEY_ID in s3.secret.yml");
-    }
     // https://docs.aws.amazon.com/general/latest/gr/s3.html
     const AWS_S3_ENDPOINT_URL = "https://s3." + setting.AWS_REGION + ".amazonaws.com";
     this.bucket = new S3Bucket({
@@ -28,11 +25,11 @@ class S3 {
     if (typeof bin == "string" && opt == undefined) {
       opt = { contentType: "text/plain" };
     }
-    if (this.ispublic) {
+    if (this.putopt) {
       if (!opt) {
         opt = {};
       }
-      opt.acl = "public-read";
+      Object.assign(opt, this.putopt);
     }
     return await this.bucket.putObject(fn, bin, opt);
   }
