@@ -1,6 +1,8 @@
 # S3API
 
-API for S3
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
+API for interacting with AWS S3 buckets.
 
 ## Features
 - Provides a simple API for interacting with AWS S3 buckets
