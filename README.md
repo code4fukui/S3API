@@ -33,14 +33,14 @@ import { S3 } from "../S3.js";
 const s3 = await new S3().init();
 
 // Upload a file
-await s3.put("test.html", "test");
+await s3.put("test.mov", new Uint8Array(await Deno.readFile("test.mov")), { contentType: "video/quicktime" });
 
 // List files
 console.log(await s3.list());
 
 // Get the URL of a file
-console.log(s3.getURL("test.html"));
+console.log(s3.getURL("test.mov"));
 ```
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+MIT License — see [LICENSE](LICENSE).
